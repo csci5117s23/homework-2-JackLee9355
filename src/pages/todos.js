@@ -11,7 +11,6 @@ export default function Todos() {
             width: "100vw"
         }}>
             <Header />
-            Todos
             <div style={{
                 display: "flex",
                 flexDirection: "row",

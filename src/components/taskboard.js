@@ -31,16 +31,15 @@ export default function Taskboard() {
         <div style={{
             display: "flex",
             flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
+            width: "100%",
+            padding: "20px",
         }}>
             Taskboard
             <div style={{
                 display: "flex",
-                flexDirection: "row",
+                flexDirection: "column",
                 justifyContent: "center",
-                alignItems: "center",
-                flexWrap: "wrap",
+                width: "100%",
             }}>
                 {todos == null ?
                 <div>Loading...</div> :
@@ -51,6 +50,7 @@ export default function Taskboard() {
                             text={todo.text} 
                             tatus={todo.status} 
                             data={todo.dueDate}
+                            categories={todo.categories}
                         />
                     )
                 })}

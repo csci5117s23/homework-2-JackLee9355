@@ -6,7 +6,8 @@ export default function Header() {
             flexDirection: 'row',
             height: '75px',
             width: '100vw',
-            backgroundColor: 'forestgreen',
+            backgroundColor: 'var(--green)',
+            borderBottom: '2px solid black',
         }}>
             <h1>Header</h1>
         </div>

@@ -1,4 +1,6 @@
-export default function Todo({ prio, text, status, date }) {
+export default function Todo({ prio, text, status, date, categories }) {
+
+    categories = ["one", "two", "three", "four"]
 
     return (
         <div style={{
@@ -10,13 +12,49 @@ export default function Todo({ prio, text, status, date }) {
             borderRadius: "10px",
             padding: "10px",
             margin: "10px",
-            width: "20%"
+            width: "80%"
         }}>
-            <h1>Todo</h1>
-            {prio}
-            {text}
-            {status}
-            {date}
+            <div style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between"
+            }}>
+                <span>{text}</span>
+                <span style={{
+                    textAlign: "right",
+                }}>{prio}</span>
+            </div>
+            <div style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between"
+            }}>
+                <div style={{
+                    display: "flex",
+                    flexDirection: "row",
+                }}>
+                    {categories && categories.map((category, index) => {
+                        return (
+                            <div style={{
+                                backgroundColor: "var(--green)",
+                                color: "var(--text)",
+                                padding: "3px",
+                                border: "2px solid black",
+                                borderRadius: "5px",
+                                marginRight: "5px"
+                            }}>
+                                {category}
+                            </div>
+                        );
+                    })}
+                </div>
+                <span style={{
+                    textAlign: "right",
+                    color: "grey",
+                }}>
+                    <i>{date == null ? "None" : date}</i>
+                </span>
+            </div>
         </div>
     )
 }
