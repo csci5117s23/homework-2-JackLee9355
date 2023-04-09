@@ -1,5 +1,6 @@
 import Taskboard from "../components/taskboard"
 import Header from "../components/header"
+import Sidebar from "../components/sidebar"
 
 export default function Todos() {
     return (
@@ -11,7 +12,15 @@ export default function Todos() {
         }}>
             <Header />
             Todos
-            <Taskboard />
+            <div style={{
+                display: "flex",
+                flexDirection: "row",
+                height: "100vh",
+                width: "100vw"
+            }}>
+                <Sidebar></Sidebar>
+                <Taskboard />
+            </div>
         </div>
     )
 }
