@@ -8,13 +8,10 @@ export default function Taskboard({ heading, user, filters, newTodos, category }
     const [sortByDate, setSortByDate] = useState(true);
 
     useEffect(() => {
-        console.log(global.config.backend.apiKey)
-        console.log(global.config.backend.apiUrl)
         const filterStr = "?owner=" + user + (
             filters == null || filters == "" ? 
             "" : "&" + filters
         );
-        console.log(filterStr);
         const fetchData = async () => {
             const response = await fetch(global.config.backend.apiUrl + "/todo" + filterStr, {
                 method: "GET",
@@ -22,9 +19,7 @@ export default function Taskboard({ heading, user, filters, newTodos, category }
                     "x-apikey": global.config.backend.apiKey
                 }
             });
-            console.log(response);
             const data = await response.json();
-            console.log(data);
             sortTodos(data);
             setTodos(data);
         }
@@ -49,7 +44,6 @@ export default function Taskboard({ heading, user, filters, newTodos, category }
         todos.sort((a, b) => {
             const dateDiff = new Date(b.dueDate) - new Date(a.dueDate);
             const prioDiff = b.priority - a.priority;
-            console.log("sorting");
             if (sortByDate && dateDiff !== 0) {
                 return dateDiff;
             } else {
@@ -59,12 +53,10 @@ export default function Taskboard({ heading, user, filters, newTodos, category }
     }
 
     useEffect(() => {
-        console.log("effect " + sortByDate)
         if (todos) {
             const sortedTodos = [...todos];
             sortTodos(sortedTodos);
             if (!areListsEqual(todos, sortedTodos)) {
-                console.log("was good" + sortedTodos);
                 setTodos(sortedTodos);
             }
         }
@@ -88,7 +80,6 @@ export default function Taskboard({ heading, user, filters, newTodos, category }
                     src={!sortByDate ? "date-icon.svg" : "self-timer-icon.svg"}
                     onClick={() => {
                         setSortByDate(!sortByDate);
-                        console.log(sortByDate);
                     }}
                     style={{ width: "30px" }}
                 />

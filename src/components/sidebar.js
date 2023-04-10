@@ -9,22 +9,18 @@ export default function Sidebar( { addTodo } ) {
     const [newCategories, setNewCategories] = useState([]);
     const [selectedCategories, setSelectedCategories] = useState([]);
 
-    const { isLoaded, userId, sessionId, getToken } = useAuth();
-
-    async function test() {
-      const token = await getToken({template: 'codehooks'})
-    }
+    const USER = "IDK";
 
 
     const getSelectedCategories = () => {
-        return [];
+        return selectedCategories.map( (category) => category.name);
     }
 
     const handleSubmit = (event) => {
         event.preventDefault();
         if (!inputValue)
             return;
-
+            
         const fetchData = async () => {
             const newTodo = {
                 "owner": USER,

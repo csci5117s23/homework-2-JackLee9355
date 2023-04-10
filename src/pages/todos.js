@@ -1,14 +1,22 @@
 import Taskboard from "../components/taskboard"
 import Header from "../components/header"
 import Sidebar from "../components/sidebar"
+import Login from "./login"
 import { useState } from "react"
+import { useAuth } from '@clerk/nextjs';
 
 export default function Todos({done, category}) {
+
+    const { isLoaded, userId, sessionId, getToken } = useAuth();
 
     const [newTodos, setNewTodos] = useState([]);
 
     const addTodo = (todo) => {
         setNewTodos([...newTodos, todo]);
+    }
+
+    if (!userId) {
+        return <Login />
     }
 
     return (
