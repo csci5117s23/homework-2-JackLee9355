@@ -1,6 +1,8 @@
+import Category from './category'
+
 export default function Todo({ prio, text, status, date, categories }) {
 
-    categories = ["one", "two", "three", "four"]
+    // categories = ["one", "two", "three", "four"]
 
     return (
         <div style={{
@@ -34,25 +36,14 @@ export default function Todo({ prio, text, status, date, categories }) {
                     flexDirection: "row",
                 }}>
                     {categories && categories.map((category, index) => {
-                        return (
-                            <div style={{
-                                backgroundColor: "var(--green)",
-                                color: "var(--text)",
-                                padding: "3px",
-                                border: "2px solid black",
-                                borderRadius: "5px",
-                                marginRight: "5px"
-                            }}>
-                                {category}
-                            </div>
-                        );
+                        return <Category key={index} category={category} />   
                     })}
                 </div>
                 <span style={{
                     textAlign: "right",
                     color: "grey",
                 }}>
-                    <i>{date == null ? "None" : date}</i>
+                    <i>{date == null ? "None" : new Date(date).toLocaleString()}</i>
                 </span>
             </div>
         </div>

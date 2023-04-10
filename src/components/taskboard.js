@@ -1,17 +1,22 @@
 import './config';
 import { useState, useEffect } from "react"
 import Todo from './todo';
-import { date } from 'yup';
 
-export default function Taskboard() {
+export default function Taskboard({ heading, user, filters, newTodos }) {
 
     const [todos, setTodos] = useState(null);
+    const [sortByDate, setSortByDate] = useState(true);
 
     useEffect(() => {
         console.log(global.config.backend.apiKey)
         console.log(global.config.backend.apiUrl)
+        const filterStr = "?owner=" + user + (
+            filters == null || filters == "" ? 
+            "" : "&" + filters
+        );
+        console.log(filterStr);
         const fetchData = async () => {
-            const response = await fetch(global.config.backend.apiUrl + "/todo", {
+            const response = await fetch(global.config.backend.apiUrl + "/todo" + filterStr, {
                 method: "GET",
                 headers: {
                     "x-apikey": global.config.backend.apiKey
@@ -20,21 +25,74 @@ export default function Taskboard() {
             console.log(response);
             const data = await response.json();
             console.log(data);
+            sortTodos(data);
             setTodos(data);
         }
         fetchData();
-    }, []);
+    }, [newTodos]); // So I should probably add these seperately. Or I can just refresh
 
-    const USER = "IDK";
+    const areListsEqual = (list1, list2) => {
+        if (list1.length !== list2.length) {
+            return false;
+        }
+    
+        for (let i = 0; i < list1.length; i++) {
+            if (JSON.stringify(list1[i]) != JSON.stringify(list2[i])) {
+                return false;
+            }
+        }
+    
+        return true;
+    }
+
+    const sortTodos = (todos) => {
+        todos.sort((a, b) => {
+            const dateDiff = new Date(b.dueDate) - new Date(a.dueDate);
+            const prioDiff = b.priority - a.priority;
+            console.log("sorting");
+            if (sortByDate && dateDiff !== 0) {
+                return dateDiff;
+            } else {
+                return prioDiff;
+            }
+        })
+    }
+
+    useEffect(() => {
+        console.log("effect " + sortByDate)
+        if (todos) {
+            const sortedTodos = [...todos];
+            sortTodos(sortedTodos);
+            if (!areListsEqual(todos, sortedTodos)) {
+                console.log("was good" + sortedTodos);
+                setTodos(sortedTodos);
+            }
+        }
+    }, [todos, sortByDate]);
 
     return (
         <div style={{
             display: "flex",
             flexDirection: "column",
-            width: "100%",
-            padding: "20px",
+            flexGrow: 1,
+            padding: "20px 40px 20px 20px",
         }}>
-            Taskboard
+            <div style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                width: "100%",
+            }}>
+                {heading}
+                <img
+                    src={!sortByDate ? "date-icon.svg" : "self-timer-icon.svg"}
+                    onClick={() => {
+                        setSortByDate(!sortByDate);
+                        console.log(sortByDate);
+                    }}
+                    style={{ width: "30px" }}
+                />
+            </div> 
             <div style={{
                 display: "flex",
                 flexDirection: "column",
@@ -43,13 +101,14 @@ export default function Taskboard() {
             }}>
                 {todos == null ?
                 <div>Loading...</div> :
-                todos.filter(ele => ele.owner == USER).map((todo, index) => {
+                todos.map((todo, index) => {
                     return (
                         <Todo 
-                            prio={todo.priority} 
+                            key={JSON.stringify(todo)} 
+                            prio={todo.priority}
                             text={todo.text} 
-                            tatus={todo.status} 
-                            data={todo.dueDate}
+                            status={todo.status} 
+                            date={todo.dueDate}
                             categories={todo.categories}
                         />
                     )
