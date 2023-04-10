@@ -1,12 +1,20 @@
 import React, { useState } from 'react';
 import Categories from './categories';
+import { useAuth } from '@clerk/nextjs';
+
+// TheOnlyMuffinMan
 
 export default function Sidebar( { addTodo } ) {
     const [inputValue, setInputValue] = useState('');
     const [newCategories, setNewCategories] = useState([]);
     const [selectedCategories, setSelectedCategories] = useState([]);
 
-    const USER = "IDK";
+    const { isLoaded, userId, sessionId, getToken } = useAuth();
+
+    async function test() {
+      const token = await getToken({template: 'codehooks'})
+    }
+
 
     const getSelectedCategories = () => {
         return [];

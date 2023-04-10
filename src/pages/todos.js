@@ -3,7 +3,7 @@ import Header from "../components/header"
 import Sidebar from "../components/sidebar"
 import { useState } from "react"
 
-export default function Todos({done}) {
+export default function Todos({done, category}) {
 
     const [newTodos, setNewTodos] = useState([]);
 
@@ -38,6 +38,7 @@ export default function Todos({done}) {
                     user={"IDK"} 
                     filters={done ? "status=Done" : null}
                     newTodos={newTodos}
+                    category={category}
                 />
             </div>
         </div>

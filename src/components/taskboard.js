@@ -2,7 +2,7 @@ import './config';
 import { useState, useEffect } from "react"
 import Todo from './todo';
 
-export default function Taskboard({ heading, user, filters, newTodos }) {
+export default function Taskboard({ heading, user, filters, newTodos, category }) {
 
     const [todos, setTodos] = useState(null);
     const [sortByDate, setSortByDate] = useState(true);
@@ -101,7 +101,9 @@ export default function Taskboard({ heading, user, filters, newTodos }) {
             }}>
                 {todos == null ?
                 <div>Loading...</div> :
-                todos.map((todo, index) => {
+                todos.filter(
+                    ele => !category || (ele.categories && ele.categories.includes(category))
+                ).map((todo, index) => {
                     return (
                         <Todo 
                             key={JSON.stringify(todo)} 
