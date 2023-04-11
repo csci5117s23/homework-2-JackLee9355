@@ -15,10 +15,11 @@ export default function Taskboard({ heading, filters, newTodos, category }) {
             "" : "&" + filters
         );
         const fetchData = async () => {
+            const token = await getToken({ template: "codehooks" });
             const response = await fetch(global.config.backend.apiUrl + "/todo" + filterStr, {
                 method: "GET",
                 headers: {
-                    "x-apikey": global.config.backend.apiKey
+                    'Authorization': 'Bearer ' + token
                 }
             });
             const data = await response.json();
@@ -68,8 +69,8 @@ export default function Taskboard({ heading, filters, newTodos, category }) {
         <div style={{
             display: "flex",
             flexDirection: "column",
-            flexGrow: 1,
             padding: "20px 40px 20px 20px",
+            width: "75%",
         }}>
             <div style={{
                 display: "flex",
@@ -97,9 +98,11 @@ export default function Taskboard({ heading, filters, newTodos, category }) {
                 todos.filter(
                     ele => !category || (ele.categories && ele.categories.includes(category))
                 ).map((todo, index) => {
+                    console.log(todo);
                     return (
                         <Todo 
                             key={JSON.stringify(todo)} 
+                            id={todo._id}
                             prio={todo.priority}
                             text={todo.text} 
                             status={todo.status} 

@@ -1,13 +1,34 @@
 import Category from './category';
 import { useState, useEffect } from 'react';
 
-export default function Todo({ prio, text, status, date, categories }) {
+export default function Todo({ id, prio, text, status, date, categories }) {
 
     // categories = ["one", "two", "three", "four"]
     const [done, setDone] = useState(status === "done");
 
+    // Update the status of the todo on codehooks
     useEffect(() => {
-        // TODO update status in backend
+        const fetchData = async () => {
+            const update = {
+                status: done ? "Done" : "WIP",
+            }
+
+            if (update.status == status) {
+                return;
+            }
+
+            const token = await getToken({ template: "codehooks" });
+            const response = await fetch(global.config.backend.apiUrl + "/todo/" + id, {
+                method: "PATCH",
+                headers: {
+                    'Authorization': 'Bearer ' + token,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(update)
+            });
+        }
+        
+        fetchData();
     }, [done]);
 
     return (

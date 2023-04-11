@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 
 export default function Header({category}) {
     const [newCategories, setNewCategories] = useState([]);
-    const [selectedCategories, setSelectedCategories] = useState(/*category ? [{name: category}] : */[]);
+    const [selectedCategories, setSelectedCategories] = useState(category ? [{name: category}] : []);
     const { isLoaded, userId, sessionId, getToken } = useAuth();
     const router = useRouter();
 
@@ -16,15 +16,16 @@ export default function Header({category}) {
             const newCategory = selectedCategories.find(c => c.name != category);
             if (newCategory) { 
                 pathname = '/todos/' + newCategory.name;
-                
-                //console.log(pathname);
                 if (pathname !== router.pathname) {
                     router.push(pathname);
                 }
             }
-        } /* else {
+        } else {
             pathname = '/todos';
-        } */
+            if (pathname !== router.pathname) {
+                router.push(pathname);
+            }
+        }
       }, [selectedCategories]);
 
     return (

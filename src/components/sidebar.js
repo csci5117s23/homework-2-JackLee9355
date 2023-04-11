@@ -16,7 +16,7 @@ export default function Sidebar( { addTodo } ) {
         event.preventDefault();
         if (!inputValue)
             return;
-            
+        
         const fetchData = async () => {
             const newTodo = {
                 "owner": userId,
@@ -28,10 +28,11 @@ export default function Sidebar( { addTodo } ) {
             };
             addTodo(newTodo);
 
+            const token = await getToken({ template: "codehooks" });
             const response = await fetch(global.config.backend.apiUrl + "/todo", {
                 method: "POST",
                 headers: {
-                    "x-apikey": global.config.backend.apiKey,
+                    'Authorization': 'Bearer ' + token,
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify(newTodo)
@@ -43,6 +44,7 @@ export default function Sidebar( { addTodo } ) {
     return (
         <div style={{
             width: "20vw",
+            minWidth: "20vw",
             height: "100vh",
             display: "flex",
             flexDirection: "column",

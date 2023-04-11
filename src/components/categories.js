@@ -11,10 +11,11 @@ export default function Categories( { setSelectedCategories, newCategories, cont
 
     useEffect(() => {
         const fetchData = async () => {
+            const token = await getToken({ template: "codehooks" });
             const response = await fetch(global.config.backend.apiUrl + "/category?owner=" + USER, {
                 method: "GET",
                 headers: {
-                    "x-apikey": global.config.backend.apiKey
+                    'Authorization': 'Bearer ' + token
                 }
             });
             const data = await response.json();
