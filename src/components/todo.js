@@ -1,10 +1,11 @@
 import Category from './category';
 import { useState, useEffect } from 'react';
+import { useAuth } from '@clerk/nextjs';
 
 export default function Todo({ id, prio, text, status, date, categories }) {
 
-    // categories = ["one", "two", "three", "four"]
-    const [done, setDone] = useState(status === "done");
+    const [done, setDone] = useState(status == "Done");
+    const { isLoaded, userId, sessionId, getToken } = useAuth();
 
     // Update the status of the todo on codehooks
     useEffect(() => {
@@ -41,12 +42,26 @@ export default function Todo({ id, prio, text, status, date, categories }) {
             borderRadius: "10px",
             padding: "10px",
             margin: "10px",
-            width: "80%"
+            width: "80%",
+            position: 'relative',
         }}>
+            {done && (
+              <div style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                backgroundColor: 'black',
+                opacity: 0.5,
+                zIndex: 1,
+              }}></div>
+            )}
             <div style={{
                 display: "flex",
                 flexDirection: "row",
-                justifyContent: "space-between"
+                justifyContent: "space-between",
+                zIndex: 2,
             }}>
                 <span style={{
                     whiteSpace: 'nowrap',
@@ -55,9 +70,11 @@ export default function Todo({ id, prio, text, status, date, categories }) {
                     maxWidth: '80vw',
                     paddingRight: '30px'
                 }}>{text}</span>
-                <span style={{
-                    textAlign: "right",
-                }}>{prio}</span>
+                <img 
+                    src={`/iconmonstr-${done ? 'x' : 'check'}-mark-1.svg`}
+                    onClick={() => setDone(!done)}
+                >
+                </img>
             </div>
             <div style={{
                 display: "flex",

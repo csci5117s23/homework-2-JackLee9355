@@ -10,21 +10,18 @@ export default function Header({category}) {
     const router = useRouter();
 
     useEffect(() => {
-        let pathname;
+        let pathname = '/' + router.pathname.split('/')[1];;
         if (selectedCategories.length > 0) {
             console.log(selectedCategories);
             const newCategory = selectedCategories.find(c => c.name != category);
             if (newCategory) { 
-                pathname = '/todos/' + newCategory.name;
+                pathname += '/' + newCategory.name;
                 if (pathname !== router.pathname) {
                     router.push(pathname);
                 }
             }
-        } else {
-            pathname = '/todos';
-            if (pathname !== router.pathname) {
-                router.push(pathname);
-            }
+        } else if (pathname !== router.pathname) {
+            router.push(pathname);
         }
       }, [selectedCategories]);
 
