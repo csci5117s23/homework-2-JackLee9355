@@ -3,13 +3,9 @@ import Todos from '../todos';
 
 export default function DoneCategoryTodo() {
     const router = useRouter();
-    const data = router.query.data;
+    const category = router.query.category;
 
     return (
-        <Todos 
-            done={true}
-            category={data.length != 24 ? data : null}
-            id={data.length == 24 ? data : null}
-        />
+        <Todos done={true} category={category}/>
     );
 }
