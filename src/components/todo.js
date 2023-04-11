@@ -1,8 +1,14 @@
-import Category from './category'
+import Category from './category';
+import { useState, useEffect } from 'react';
 
 export default function Todo({ prio, text, status, date, categories }) {
 
     // categories = ["one", "two", "three", "four"]
+    const [done, setDone] = useState(status === "done");
+
+    useEffect(() => {
+        // TODO update status in backend
+    }, [done]);
 
     return (
         <div style={{
@@ -21,7 +27,13 @@ export default function Todo({ prio, text, status, date, categories }) {
                 flexDirection: "row",
                 justifyContent: "space-between"
             }}>
-                <span>{text}</span>
+                <span style={{
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    maxWidth: '80vw',
+                    paddingRight: '30px'
+                }}>{text}</span>
                 <span style={{
                     textAlign: "right",
                 }}>{prio}</span>

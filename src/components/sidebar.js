@@ -2,15 +2,11 @@ import React, { useState } from 'react';
 import Categories from './categories';
 import { useAuth } from '@clerk/nextjs';
 
-// TheOnlyMuffinMan
-
 export default function Sidebar( { addTodo } ) {
     const [inputValue, setInputValue] = useState('');
     const [newCategories, setNewCategories] = useState([]);
     const [selectedCategories, setSelectedCategories] = useState([]);
-
-    const USER = "IDK";
-
+    const { isLoaded, userId, sessionId, getToken } = useAuth();
 
     const getSelectedCategories = () => {
         return selectedCategories.map( (category) => category.name);
@@ -23,7 +19,7 @@ export default function Sidebar( { addTodo } ) {
             
         const fetchData = async () => {
             const newTodo = {
-                "owner": USER,
+                "owner": userId,
                 "status": "WIP",
                 "text": inputValue,
                 priority: "1",
@@ -79,6 +75,14 @@ export default function Sidebar( { addTodo } ) {
                 <Categories
                     setSelectedCategories={setSelectedCategories}
                     newCategories={newCategories}
+                    containerStyle={{
+                        display: "flex",
+                        justifyContent: "center",
+                        flexDirection: "row",
+                        flexWrap: "wrap",
+                        width: "100%",
+                        padding: "0.5rem",
+                }}
                 />
                 <button 
                     type="submit"

@@ -8,13 +8,16 @@ export default function Category( { category, selected, onClick } ) {
             style={{
                 backgroundColor: selected ? "var(--brown)" : "var(--green)",
                 color: "var(--text)",
-                padding: "3px",
+                padding: "5px",
                 border: "2px solid black",
                 borderRadius: "5px",
-                marginRight: "5px"
+                marginRight: "5px",
+                marginBottom: "5px",
+                width: "fit-content",
+                height: "fit-content"
             }}
         >
-            {category}
+            <span>{category}</span>
         </div>
     );
 }

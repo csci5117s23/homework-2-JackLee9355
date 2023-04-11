@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import Category from './category';
+import { useAuth } from '@clerk/nextjs';
 
-export default function Categories( { setSelectedCategories, newCategories } ) {
+export default function Categories( { setSelectedCategories, newCategories, containerStyle, category } ) {
 
     const [categories, setCategories] = useState(null);
     const [selected, setSelected] = useState(null);
+    const { isLoaded, userId, sessionId, getToken } = useAuth();
     const USER = "IDK";
 
     useEffect(() => {
@@ -17,10 +19,17 @@ export default function Categories( { setSelectedCategories, newCategories } ) {
             });
             const data = await response.json();
             setCategories(data);
-            setSelected(Array(data.length).fill(false));
+            const toSelect = Array(data.length).fill(false);
+            if (category) {
+                let i = data.findIndex(c => c.name == category);
+                if (i != -1) {
+                    toSelect[i] = true;
+                }
+            }
+            setSelected(toSelect);
         }
         fetchData();
-    }, [newCategories]);
+    }, [newCategories, category]);
 
     useEffect(() => {
         if (categories == null) {
@@ -37,7 +46,7 @@ export default function Categories( { setSelectedCategories, newCategories } ) {
     }, [selected]);
 
     return (
-        <div>
+        <div style={containerStyle}>
             {categories == null ? "Loading Categories..." : categories.map((category, index) => {
 
                 const select = () => {

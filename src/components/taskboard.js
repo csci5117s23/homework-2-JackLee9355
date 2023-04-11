@@ -1,14 +1,16 @@
 import './config';
 import { useState, useEffect } from "react"
 import Todo from './todo';
+import { useAuth } from '@clerk/nextjs';
 
-export default function Taskboard({ heading, user, filters, newTodos, category }) {
+export default function Taskboard({ heading, filters, newTodos, category }) {
 
     const [todos, setTodos] = useState(null);
     const [sortByDate, setSortByDate] = useState(true);
+    const { isLoaded, userId, sessionId, getToken } = useAuth();
 
     useEffect(() => {
-        const filterStr = "?owner=" + user + (
+        const filterStr = "?owner=" + userId + (
             filters == null || filters == "" ? 
             "" : "&" + filters
         );
@@ -77,7 +79,7 @@ export default function Taskboard({ heading, user, filters, newTodos, category }
             }}>
                 {heading}
                 <img
-                    src={!sortByDate ? "date-icon.svg" : "self-timer-icon.svg"}
+                    src={!sortByDate ? "/date-icon.svg" : "/self-timer-icon.svg"}
                     onClick={() => {
                         setSortByDate(!sortByDate);
                     }}

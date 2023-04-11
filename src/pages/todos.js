@@ -26,14 +26,19 @@ export default function Todos({done, category}) {
             height: "100vh",
             width: "100vw"
         }}>
-            <Header />
+            <Header
+                category={category} 
+            />
             <div style={{
                 display: "flex",
                 flexDirection: "row",
                 height: "100vh",
                 width: "100vw"
             }}>
-                <Sidebar addTodo={addTodo}/>
+                <Sidebar 
+                    addTodo={addTodo}
+                    category={category}
+                />
                 <Taskboard 
                     heading={
                         <h2>
@@ -43,7 +48,6 @@ export default function Todos({done, category}) {
                             }
                         </h2>
                     }
-                    user={"IDK"} 
                     filters={done ? "status=Done" : null}
                     newTodos={newTodos}
                     category={category}
