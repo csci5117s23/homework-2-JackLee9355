@@ -1,11 +1,13 @@
 import Category from './category';
 import { useState, useEffect } from 'react';
 import { useAuth } from '@clerk/nextjs';
+import { useRouter } from 'next/router';
 
-export default function Todo({ id, prio, text, status, date, categories }) {
+export default function Todo({ id, prio, text, status, date, categories, focused }) {
 
     const [done, setDone] = useState(status == "Done");
     const { isLoaded, userId, sessionId, getToken } = useAuth();
+    const router = useRouter();
 
     // Update the status of the todo on codehooks
     useEffect(() => {
@@ -32,6 +34,14 @@ export default function Todo({ id, prio, text, status, date, categories }) {
         fetchData();
     }, [done]);
 
+    const handleClick = (event) => {
+        if (event.target.closest('.done-button')) {
+            return;
+        }
+
+        router.push("/todo/" + id);
+    }
+
     return (
         <div style={{
             display: "flex",
@@ -43,8 +53,8 @@ export default function Todo({ id, prio, text, status, date, categories }) {
             padding: "10px",
             margin: "10px",
             width: "80%",
-            position: 'relative',
-        }}>
+            position: 'relative'
+        }} onClick={handleClick}>
             {done && (
               <div style={{
                 position: 'absolute',
@@ -73,6 +83,7 @@ export default function Todo({ id, prio, text, status, date, categories }) {
                 <img 
                     src={`/iconmonstr-${done ? 'x' : 'check'}-mark-1.svg`}
                     onClick={() => setDone(!done)}
+                    className="done-button"
                 >
                 </img>
             </div>

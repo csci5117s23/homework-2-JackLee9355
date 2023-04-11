@@ -5,7 +5,7 @@ import Login from "./login"
 import { useState } from "react"
 import { useAuth } from '@clerk/nextjs';
 
-export default function Todos({done, category}) {
+export default function Todos({done, category, id}) {
 
     const { isLoaded, userId, sessionId, getToken } = useAuth();
 
@@ -51,6 +51,7 @@ export default function Todos({done, category}) {
                     filters={done ? "status=Done" : null}
                     newTodos={newTodos}
                     category={category}
+                    id={id}
                 />
             </div>
         </div>

@@ -71,7 +71,8 @@ export default function Sidebar( { addTodo } ) {
                         height: "10rem",
                         padding: "0.5rem",
                         border: "1px solid black",
-                        borderRadius: "0.5rem"
+                        borderRadius: "0.5rem",
+                        resize: "none"
                     }}
                 />
                 <Categories

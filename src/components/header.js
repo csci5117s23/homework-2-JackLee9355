@@ -2,6 +2,7 @@ import { useAuth, UserButton } from '@clerk/nextjs';
 import Categories from './categories';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 export default function Header({category}) {
     const [newCategories, setNewCategories] = useState([]);
@@ -10,7 +11,9 @@ export default function Header({category}) {
     const router = useRouter();
 
     useEffect(() => {
-        let pathname = '/' + router.pathname.split('/')[1];;
+        let pathname = '/' + router.pathname.split('/')[1];
+        // Changes it for leaving specific todos
+        pathname = pathname == '/todo' ? '/todos' : pathname;
         if (selectedCategories.length > 0) {
             console.log(selectedCategories);
             const newCategory = selectedCategories.find(c => c.name != category);
@@ -20,7 +23,7 @@ export default function Header({category}) {
                     router.push(pathname);
                 }
             }
-        } else if (pathname !== router.pathname) {
+        } else if (pathname !== router.pathname && category) {
             router.push(pathname);
         }
       }, [selectedCategories]);
@@ -36,7 +39,11 @@ export default function Header({category}) {
             backgroundColor: 'var(--green)',
             borderBottom: '2px solid black',
         }}>
-            <h1>Epic Todo List</h1>
+            <Link href='/todos/'>
+                <h1 style={{color: 'white'}}>
+                    Epic Todo List
+                </h1>
+            </Link>
             <div style={{
                 display: 'flex',
                 flexDirection: 'column',

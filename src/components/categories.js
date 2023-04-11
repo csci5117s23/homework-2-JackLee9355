@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import Category from './category';
 import { useAuth } from '@clerk/nextjs';
+import { useRouter } from 'next/router';
 
 export default function Categories( { setSelectedCategories, newCategories, containerStyle, category } ) {
 
     const [categories, setCategories] = useState(null);
     const [selected, setSelected] = useState(null);
     const { isLoaded, userId, sessionId, getToken } = useAuth();
+    const router = useRouter();
     const USER = "IDK";
 
     useEffect(() => {
@@ -23,9 +25,11 @@ export default function Categories( { setSelectedCategories, newCategories, cont
             const toSelect = Array(data.length).fill(false);
             if (category) {
                 let i = data.findIndex(c => c.name == category);
-                if (i != -1) {
-                    toSelect[i] = true;
+                if (i == -1) {
+                    router.push("/404");
                 }
+
+                toSelect[i] = true;
             }
             setSelected(toSelect);
         }

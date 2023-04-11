@@ -2,12 +2,14 @@ import './config';
 import { useState, useEffect } from "react"
 import Todo from './todo';
 import { useAuth } from '@clerk/nextjs';
+import { useRouter } from 'next/router';
 
-export default function Taskboard({ heading, filters, newTodos, category }) {
+export default function Taskboard({ heading, filters, newTodos, category, id }) {
 
     const [todos, setTodos] = useState(null);
     const [sortByDate, setSortByDate] = useState(true);
     const { isLoaded, userId, sessionId, getToken } = useAuth();
+    const router = useRouter();
 
     useEffect(() => {
         const filterStr = "?owner=" + userId + (
@@ -65,6 +67,27 @@ export default function Taskboard({ heading, filters, newTodos, category }) {
         }
     }, [todos, sortByDate]);
 
+    const getById = (id) => {
+        const todo = todos.find(todo => todo._id == id);
+
+        if (!todo) {
+            router.push('/404');
+        }
+
+        return (
+            <Todo
+                key={JSON.stringify(todo)} 
+                id={todo._id}
+                prio={todo.priority}
+                text={todo.text} 
+                status={todo.status} 
+                date={todo.dueDate}
+                categories={todo.categories}
+                focused={true}
+            />
+        )
+    }
+
     return (
         <div style={{
             display: "flex",
@@ -94,8 +117,9 @@ export default function Taskboard({ heading, filters, newTodos, category }) {
                 width: "100%",
             }}>
                 {todos == null ?
-                <div>Loading...</div> :
-                todos.filter(
+                <div>Loading...</div> : ( id ? 
+                    getById(id)
+                : todos.filter(
                     ele => !category || (ele.categories && ele.categories.includes(category))
                 ).map((todo, index) => {
                     console.log(todo);
@@ -110,7 +134,7 @@ export default function Taskboard({ heading, filters, newTodos, category }) {
                             categories={todo.categories}
                         />
                     )
-                })}
+                }))}
             </div>
         </div>
     )
