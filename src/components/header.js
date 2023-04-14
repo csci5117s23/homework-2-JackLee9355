@@ -15,7 +15,6 @@ export default function Header({category}) {
         // Changes it for leaving specific todos
         pathname = pathname == '/todo' ? '/todos' : pathname;
         if (selectedCategories.length > 0) {
-            console.log(selectedCategories);
             const newCategory = selectedCategories.find(c => c.name != category);
             if (newCategory) { 
                 pathname += '/' + newCategory.name;

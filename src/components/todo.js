@@ -74,7 +74,7 @@ export default function Todo({ id, prio, text, status, date, categories, focused
                 zIndex: 2,
             }}>
                 <span style={{
-                    whiteSpace: 'nowrap',
+                    whiteSpace: focused ? 'normal' : 'nowrap',
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
                     maxWidth: '80vw',

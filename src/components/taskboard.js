@@ -70,8 +70,6 @@ export default function Taskboard({ heading, filters, newTodos, category, id }) 
                         const pieces = router.pathname.split('/');
                         let newPath = pieces[1] != 'todos' ? '/todos/' : '/done/';
                         newPath += category ? category : '';
-                        console.log(newPath);
-                        console.log(pieces[1])
                         router.push(newPath);
                     }}
                     style={{ width: "30px" }}
