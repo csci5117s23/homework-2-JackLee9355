@@ -9,12 +9,11 @@ export default function Categories( { setSelectedCategories, newCategories, cont
     const [selected, setSelected] = useState(null);
     const { isLoaded, userId, sessionId, getToken } = useAuth();
     const router = useRouter();
-    const USER = "IDK";
 
     useEffect(() => {
         const fetchData = async () => {
             const token = await getToken({ template: "codehooks" });
-            const response = await fetch(global.config.backend.apiUrl + "/category?owner=" + USER, {
+            const response = await fetch(global.config.backend.apiUrl + "/category?owner=" + userId, {
                 method: "GET",
                 headers: {
                     'Authorization': 'Bearer ' + token
@@ -34,6 +33,7 @@ export default function Categories( { setSelectedCategories, newCategories, cont
             setSelected(toSelect);
         }
         fetchData();
+        console.log('fetching...');
     }, [newCategories, category]);
 
     useEffect(() => {
