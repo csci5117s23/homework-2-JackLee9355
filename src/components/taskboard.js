@@ -3,6 +3,7 @@ import { useState, useEffect } from "react"
 import Todo from './todo';
 import { useAuth } from '@clerk/nextjs';
 import { useRouter } from 'next/router';
+import NotFound from '../pages/404';
 
 export default function Taskboard({ heading, filters, newTodos, category, id }) {
 
@@ -34,6 +35,9 @@ export default function Taskboard({ heading, filters, newTodos, category, id }) 
 
         if (!todo) {
             router.push('/404');
+            return (
+                <NotFound />
+            )
         }
 
         return (

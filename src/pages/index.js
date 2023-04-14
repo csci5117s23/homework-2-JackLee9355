@@ -1,9 +1,18 @@
 import Link from 'next/link'
 import { Inter } from 'next/font/google'
+import { useAuth } from '@clerk/nextjs';
+import { useRouter } from 'next/router';
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
+    const { isLoaded, userId, sessionId, getToken } = useAuth();
+    const router = useRouter();
+
+    if (userId) {
+        router.push('/todos/');
+    }
+
     return (
         <>
             <div style={{

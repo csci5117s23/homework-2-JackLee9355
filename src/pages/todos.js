@@ -38,6 +38,7 @@ export default function Todos({done, category, id}) {
                 <Sidebar 
                     addTodo={addTodo}
                     category={category}
+                    id={id}
                 />
                 <Taskboard 
                     heading={

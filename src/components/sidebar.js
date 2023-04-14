@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Categories from './categories';
 import { useAuth } from '@clerk/nextjs';
 
-export default function Sidebar({ addTodo }) {
+export default function Sidebar({ addTodo, id }) {
     const [inputValue, setInputValue] = useState('');
     const [categoryInputValue, setCategoryInputValue] = useState('');
     const [newCategories, setNewCategories] = useState([]);

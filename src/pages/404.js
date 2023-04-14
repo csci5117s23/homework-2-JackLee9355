@@ -24,7 +24,7 @@ export default function NotFound() {
         }}>
             <h1>404</h1>
             <h2><a href="https://www.youtube.com/watch?v=tH2w6Oxx0kQ">All we are is dust in the wind...</a></h2>
-            <Link href="/">Landing Page</Link>
+            <Link href="/todos/">To Todos</Link>
         </div>
     </div>
   )
