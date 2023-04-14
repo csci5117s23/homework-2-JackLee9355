@@ -25,7 +25,8 @@ export default function Taskboard({ heading, filters, newTodos, category, id }) 
                 }
             });
             const data = await response.json();
-            setTodos(data);
+            const sortedData = data.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+            setTodos(sortedData);
         }
         fetchData();
     }, [newTodos]); // So I should probably add these seperately. Or I can just refresh

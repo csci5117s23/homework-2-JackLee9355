@@ -1,11 +1,12 @@
 import Category from './category';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '@clerk/nextjs';
 import { useRouter } from 'next/router';
 
 export default function Todo({ id, prio, text, status, date, categories, focused }) {
 
     const [done, setDone] = useState(status == "Done");
+    const editableRef = useRef(null); // Add this ref
     const { isLoaded, userId, sessionId, getToken } = useAuth();
     const router = useRouter();
 
@@ -41,6 +42,54 @@ export default function Todo({ id, prio, text, status, date, categories, focused
 
         router.push("/todo/" + id);
     }
+
+    const handleEditableTextChange = (event) => {
+        const selection = window.getSelection();
+        const range = selection.getRangeAt(0);
+        const offset = range.startOffset;
+    
+        // Use the current editableRef value to update the text
+        editableRef.current.textContent = event.target.innerText;
+    
+        // Restore the previous cursor position
+        const newRange = document.createRange();
+        const newSelection = window.getSelection();
+        const editableNode = editableRef.current.childNodes[0];
+        const length = editableNode.length;
+        const newOffset = Math.min(offset, length);
+        newRange.setStart(editableNode, newOffset);
+        newRange.collapse(true);
+        newSelection.removeAllRanges();
+        newSelection.addRange(newRange);
+    };
+
+    useEffect(() => {
+        if (editableRef.current) {
+            editableRef.current.textContent = text;
+        }
+    }, [text]);
+
+    const handleEditableTextBlur = () => {
+        if (editableRef.current.textContent !== text) {
+            // Update the text in coho
+            const fetchData = async () => {
+                const update = {
+                    text: editableRef.current.textContent,
+                }
+    
+                const token = await getToken({ template: "codehooks" });
+                const response = await fetch(global.config.backend.apiUrl + "/todo/" + id, {
+                    method: "PATCH",
+                    headers: {
+                        'Authorization': 'Bearer ' + token,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(update)
+                });
+            }
+            fetchData();
+        }
+    };
 
     return (
         <div style={{
@@ -78,8 +127,16 @@ export default function Todo({ id, prio, text, status, date, categories, focused
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
                     maxWidth: '80vw',
-                    paddingRight: '30px'
-                }}>{text}</span>
+                    paddingRight: '30px',
+                    cursor: focused ? 'text' : 'default',
+                }}
+                    ref={editableRef} // Add the ref to the span
+                    contentEditable={focused}
+                    suppressContentEditableWarning={true}
+                    onInput={handleEditableTextChange}
+                    onBlur={handleEditableTextBlur}
+                >
+                </span>
                 <img 
                     src={`/iconmonstr-${done ? 'x' : 'check'}-mark-1.svg`}
                     onClick={() => setDone(!done)}

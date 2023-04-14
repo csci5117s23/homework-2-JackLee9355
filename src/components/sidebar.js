@@ -27,6 +27,7 @@ export default function Sidebar({ addTodo, id }) {
                 dueDate: new Date(),
                 categories: getSelectedCategories()
             };
+            setInputValue('');
             addTodo(newTodo);
 
             const token = await getToken({ template: "codehooks" });
