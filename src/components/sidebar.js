@@ -72,6 +72,48 @@ export default function Sidebar({ addTodo, id }) {
         fetchData();
     }
 
+    const handleDeleteCategory = () => {
+        if (!categoryInputValue) return;
+
+        const fetchData = async () => {
+            const toDelete = categoryInputValue;
+            setCategoryInputValue("");
+
+            const token = await getToken({ template: "codehooks" });
+            const response = await fetch(
+                global.config.backend.apiUrl + "/category?name=" + categoryInputValue,
+                {
+                    method: "GET",
+                    headers: {
+                        Authorization: "Bearer " + token,
+                    },
+                }
+            );
+
+            // For some reason, the delete by query endpoint doesn't work /shrug
+            const responseData = await response.json();
+            for (let i = 0; i < responseData.length; i++) {
+                const deleteResponse = await fetch(
+                    global.config.backend.apiUrl + "/category/" + responseData[i]._id,
+                    {
+                        method: "DELETE",
+                        headers: {
+                            Authorization: "Bearer " + token,
+                            "Content-Type": "application/json",
+                        },
+                    }
+                );
+            }
+            console.log(responseData);
+
+            const includingNew = [...newCategories, "DELETE"];
+            setNewCategories(includingNew);
+        };
+
+        fetchData();
+    };
+
+
     return (
         <div style={{
             width: "20vw",
@@ -136,33 +178,55 @@ export default function Sidebar({ addTodo, id }) {
             </form>
             <h2 style={{ marginTop: '2rem' }}>New Category</h2>
             <form onSubmit={handleNewCategorySubmit}>
-                <input
-                    type="text"
-                    value={categoryInputValue}
-                    onChange={(event) => setCategoryInputValue(event.target.value)}
-                    placeholder="Enter category name"
-                    style={{
-                        marginBottom: '0.5rem',
-                        padding: '0.5rem',
-                        border: '1px solid black',
-                        borderRadius: '0.5rem',
-                    }}
-                />
-                <button
-                    type="submit"
-                    style={{
-                        backgroundColor: 'var(--brown)',
-                        borderRadius: '5rem',
-                        height: '2.5rem',
-                        marginLeft: '0.5rem',
-                        border: 'none',
-                        color: 'white',
-                        fontSize: '1rem',
-                        fontWeight: 'bold',
-                    }}
+                <div style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    flexDirection: "column"
+                }}
                 >
-                    Add Category
-                </button>
+                    <input
+                        type="text"
+                        value={categoryInputValue}
+                        onChange={(event) => setCategoryInputValue(event.target.value)}
+                        placeholder="Enter category name"
+                        style={{
+                            marginBottom: '0.5rem',
+                            padding: '0.5rem',
+                            border: '1px solid black',
+                            borderRadius: '0.5rem',
+                        }}
+                    />
+                    <button
+                        type="submit"
+                        style={{
+                            backgroundColor: 'green',
+                            borderRadius: '5rem',
+                            height: '2.5rem',
+                            marginLeft: '0.5rem',
+                            border: 'none',
+                            color: 'white',
+                            fontSize: '1rem',
+                            fontWeight: 'bold',
+                        }}
+                    >
+                        Add Category
+                    </button>
+                    <button
+                        onClick={handleDeleteCategory}
+                        style={{
+                            backgroundColor: 'red',
+                            borderRadius: '5rem',
+                            height: '2.5rem',
+                            marginLeft: '0.5rem',
+                            border: 'none',
+                            color: 'white',
+                            fontSize: '1rem',
+                            fontWeight: 'bold',
+                        }}
+                    >
+                        Delete Category
+                    </button>
+                </div>
             </form>
         </div>
     );
