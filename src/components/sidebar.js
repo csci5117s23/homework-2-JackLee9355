@@ -28,7 +28,6 @@ export default function Sidebar({ addTodo, id }) {
                 categories: getSelectedCategories()
             };
             setInputValue('');
-            addTodo(newTodo);
 
             const token = await getToken({ template: "codehooks" });
             const response = await fetch(global.config.backend.apiUrl + "/todo", {
@@ -39,6 +38,7 @@ export default function Sidebar({ addTodo, id }) {
                 },
                 body: JSON.stringify(newTodo)
             });
+            addTodo(newTodo);
         }
         fetchData();
     }
