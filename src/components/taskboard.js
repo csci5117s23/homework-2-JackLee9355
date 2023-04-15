@@ -33,7 +33,7 @@ export default function Taskboard({ heading, filters, newTodos, category, id }) 
             setTodos(sortedData);
         }
         fetchData();
-    }, [newTodos]); // So I should probably add these seperately. Or I can just refresh
+    }, [newTodos, newCategories]); // So I should probably add these seperately. Or I can just refresh
 
     const handleUpdateCategories = () => {
         console.log("handlin~~!");
